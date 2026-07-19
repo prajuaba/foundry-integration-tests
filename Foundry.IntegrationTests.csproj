@@ -32,6 +32,7 @@
     <ProjectReference Include="..\foundry-schema\compiler\Foundry.Schema.Compiler.csproj" />
     <ProjectReference Include="..\foundry-file-io\src\Foundry.FileIO\Foundry.FileIO.csproj" />
     <ProjectReference Include="..\foundry-realtime\src\Foundry.RealTime\Foundry.RealTime.csproj" />
+    <ProjectReference Include="..\foundry-rules\src\Foundry.Rules\Foundry.Rules.csproj" />
   </ItemGroup>
 
   <!-- Embed the existing manifests as test fixtures -->

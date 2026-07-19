@@ -18,6 +18,7 @@ using FoundryMongo.Repositories;
 using FoundryMongo.UnitOfWork;
 using Foundry.Api.MediatR;
 using Foundry.Api.MediatR.Behaviors;
+using Foundry.Rules;
 using MediatR;
 
 namespace Foundry.IntegrationTests;
@@ -167,11 +168,17 @@ public class ComplianceAndAuditingTests
     public async Task BusinessRuleBehavior_ThrowsValidationException_WhenRuleFails()
     {
         // Arrange
+        var services = new ServiceCollection();
         var mockRule = Substitute.For<IBusinessRule<TestCommand>>();
         mockRule.ValidateAsync(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>())
             .Returns(RuleResult.Failure("Invalid order status change."));
 
-        var behavior = new BusinessRuleBehavior<TestCommand, string>(new[] { mockRule });
+        services.AddSingleton(mockRule);
+        services.AddFoundryRules();
+        var provider = services.BuildServiceProvider();
+        var engine = provider.GetRequiredService<IBusinessRuleEngine>();
+
+        var behavior = new BusinessRuleBehavior<TestCommand, string>(engine);
         var request = new TestCommand();
         
         // Act & Assert
@@ -187,11 +194,17 @@ public class ComplianceAndAuditingTests
     public async Task BusinessRuleBehavior_ContinuesToNext_WhenAllRulesPass()
     {
         // Arrange
+        var services = new ServiceCollection();
         var mockRule = Substitute.For<IBusinessRule<TestCommand>>();
         mockRule.ValidateAsync(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>())
             .Returns(RuleResult.Success());
 
-        var behavior = new BusinessRuleBehavior<TestCommand, string>(new[] { mockRule });
+        services.AddSingleton(mockRule);
+        services.AddFoundryRules();
+        var provider = services.BuildServiceProvider();
+        var engine = provider.GetRequiredService<IBusinessRuleEngine>();
+
+        var behavior = new BusinessRuleBehavior<TestCommand, string>(engine);
         var request = new TestCommand();
 
         // Act
