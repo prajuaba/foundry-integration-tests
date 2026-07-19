@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
+    <!-- Explicit package refs for types not in SDK implicit usings -->
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
+  </ItemGroup>
+
+  <!-- Reference the layers we're bridging -->
+  <ItemGroup>
+    <ProjectReference Include="..\foundry-api\src\Foundry.Api\Foundry.Api.csproj" />
+    <ProjectReference Include="..\foundry-api\samples\Foundry.Api.Sample\Foundry.Api.Sample.csproj" />
+    <ProjectReference Include="..\foundry-schema\compiler\Foundry.Schema.Compiler.csproj" />
+    <ProjectReference Include="..\foundry-file-io\src\Foundry.FileIO\Foundry.FileIO.csproj" />
+    <ProjectReference Include="..\foundry-realtime\src\Foundry.RealTime\Foundry.RealTime.csproj" />
+  </ItemGroup>
+
+  <!-- Embed the existing manifests as test fixtures -->
+  <ItemGroup>
+    <None Update="fixtures\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

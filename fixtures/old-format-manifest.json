@@ -1,0 +1,29 @@
+{
+  "Namespace": "Paperclip.OrderingSystem.Domain",
+  "Endpoints": [
+    {
+      "Route": "/api/v1/orders",
+      "Entity": "Order",
+      "Methods": ["GET", "POST", "GET_BY_ID", "PUT", "DELETE"],
+      "Roles": {
+        "GET": ["Admin", "User"],
+        "GET_BY_ID": ["Admin", "User"],
+        "POST": ["Admin"],
+        "PUT": ["Admin"],
+        "DELETE": ["Admin"]
+      },
+      "Caching": {
+        "GET": { "Enabled": true, "TtlSeconds": 60 },
+        "GET_BY_ID": { "Enabled": true, "TtlSeconds": 120 }
+      }
+    }
+  ],
+  "CustomEndpoints": [
+    {
+      "Route": "/api/v1/orders/checkout",
+      "Method": "POST",
+      "RequestType": "PlaceOrderCommand",
+      "Roles": ["User", "Admin"]
+    }
+  ]
+}

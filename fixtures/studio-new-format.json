@@ -1,0 +1,100 @@
+{
+  "Namespace": "Paperclip.OrderingSystem.Domain",
+  "Entities": [
+    {
+      "Name": "Order",
+      "BaseClass": null,
+      "SoftDelete": true,
+      "Auditable": true,
+      "Indexes": [
+        { "Fields": ["CustomerId"], "Unique": false },
+        { "Fields": ["OrderNumber"], "Unique": true }
+      ]
+    },
+    {
+      "Name": "Customer",
+      "BaseClass": null,
+      "SoftDelete": false,
+      "Auditable": false,
+      "Indexes": []
+    },
+    {
+      "Name": "OrderItem",
+      "BaseClass": null,
+      "SoftDelete": false,
+      "Auditable": true,
+      "Indexes": [
+        { "Fields": ["OrderId"], "Unique": false }
+      ]
+    }
+  ],
+  "Enums": [
+    {
+      "Name": "OrderStatus",
+      "Values": ["Pending", "Completed", "Cancelled"]
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "/api/v1/orders",
+      "Entity": "Order",
+      "Methods": ["GET", "POST", "GET_BY_ID", "PUT", "DELETE"],
+      "Roles": {
+        "GET": ["Admin", "User"],
+        "GET_BY_ID": ["Admin", "User"],
+        "POST": ["Admin"],
+        "PUT": ["Admin"],
+        "DELETE": ["Admin"]
+      },
+      "Caching": {
+        "GET": { "Enabled": true, "TtlSeconds": 60 },
+        "GET_BY_ID": { "Enabled": true, "TtlSeconds": 120 }
+      },
+      "NavigationProperties": [
+        { "Name": "OrderItem", "Type": "Composition" }
+      ],
+      "ReferenceTargets": [
+        { "Name": "Customer", "Type": "Association" }
+      ]
+    },
+    {
+      "Route": "/api/v1/customers",
+      "Entity": "Customer",
+      "Methods": ["GET", "POST", "GET_BY_ID"],
+      "Roles": {
+        "GET": ["Admin", "User"],
+        "GET_BY_ID": ["Admin", "User"],
+        "POST": ["Admin"]
+      },
+      "Caching": {
+        "GET": { "Enabled": true, "TtlSeconds": 30 }
+      }
+    },
+    {
+      "Route": "/api/v1/orderitems",
+      "Entity": "OrderItem",
+      "Methods": ["GET", "POST", "GET_BY_ID", "PUT", "DELETE"],
+      "Roles": {
+        "GET": ["Admin"],
+        "GET_BY_ID": ["Admin"],
+        "POST": ["Admin"],
+        "PUT": ["Admin"],
+        "DELETE": ["Admin"]
+      }
+    }
+  ],
+  "CustomEndpoints": [
+    {
+      "Route": "/api/v1/orders/checkout",
+      "Method": "POST",
+      "RequestType": "PlaceOrderCommand",
+      "Roles": ["User", "Admin"]
+    },
+    {
+      "Route": "/api/v1/orders/cancel/{orderId}",
+      "Method": "POST",
+      "RequestType": "CancelOrderCommand",
+      "Roles": ["Admin"]
+    }
+  ]
+}
