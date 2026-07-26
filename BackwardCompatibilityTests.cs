@@ -337,9 +337,10 @@ public class BackwardCompatibilityTests : IClassFixture<WebApplicationFactory<Pr
         var output = PocoGenerator.Generate(schema);
 
         // Assert — should produce valid POCO without errors
-        Assert.Single(output);
+        // Presence, not an exact count: the generator also emits supporting files
+        // (serialization context, index verification) whose number is not what this asserts.
         Assert.True(output.ContainsKey("LegacyItem"));
-        Assert.Contains("public record LegacyItem", output["LegacyItem"]);
+        Assert.Contains("public partial record LegacyItem", output["LegacyItem"]);
         Assert.Contains("namespace Legacy.Domain.Models;", output["LegacyItem"]);
     }
 
@@ -375,7 +376,7 @@ public class BackwardCompatibilityTests : IClassFixture<WebApplicationFactory<Pr
         var output = PocoGenerator.Generate(schema);
 
         // Assert — should generate with soft-delete and auditable markers
-        Assert.Single(output);
+        Assert.True(output.ContainsKey("NewBridgeItem"));
         Assert.Contains("ISoftDelete", output["NewBridgeItem"]);
     }
 
@@ -402,7 +403,7 @@ public class BackwardCompatibilityTests : IClassFixture<WebApplicationFactory<Pr
         var output = PocoGenerator.Generate(schema);
 
         // Assert — all entities + enum should be generated
-        Assert.Equal(4, output.Count);
+        // See above: assert the domain types exist rather than counting every emitted file.
         Assert.True(output.ContainsKey("Author"));
         Assert.True(output.ContainsKey("Book"));
         Assert.True(output.ContainsKey("Review"));
@@ -411,7 +412,7 @@ public class BackwardCompatibilityTests : IClassFixture<WebApplicationFactory<Pr
         foreach (var kvp in output)
         {
             Assert.False(string.IsNullOrEmpty(kvp.Value));
-            Assert.Contains("namespace Complex.Domain.Models;", kvp.Value);
+            Assert.Contains("namespace Complex.Domain.Models", kvp.Value);
         }
     }
 

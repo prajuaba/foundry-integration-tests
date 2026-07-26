@@ -73,12 +73,14 @@ public class PipelineIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var pocoFiles = PocoGenerator.Generate(schema);
 
         // Assert — Step 3: Verify POCO output contains required classes
-        Assert.Equal(2, pocoFiles.Count);
+        // Presence rather than an exact count: the generator also emits supporting files
+        // (serialization context, index verification), and their number is not the subject
+        // of this test.
         Assert.True(pocoFiles.ContainsKey("Product"));
         Assert.True(pocoFiles.ContainsKey("ProductCategory"));
 
         var productCode = pocoFiles["Product"];
-        Assert.Contains("public record Product", productCode);
+        Assert.Contains("public partial record Product", productCode);
         Assert.Contains("using Foundry.Core.Entities;", productCode);
         Assert.Contains("namespace IntegrationTest.Domain;", productCode);
 
@@ -141,7 +143,9 @@ public class PipelineIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var pocoFiles = PocoGenerator.Generate(schema);
 
         // Assert — Both entities + enum should be generated
-        Assert.Equal(3, pocoFiles.Count);
+        // Presence rather than an exact count: the generator also emits supporting files
+        // (serialization context, index verification), and their number is not the subject
+        // of this test.
         Assert.True(pocoFiles.ContainsKey("Invoice"));
         Assert.True(pocoFiles.ContainsKey("InvoiceLine"));
         Assert.True(pocoFiles.ContainsKey("InvoiceStatus"));
@@ -198,7 +202,7 @@ public class PipelineIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         // Assert — DTO should be generated alongside the entity
         Assert.True(files.ContainsKey("Task"));
         Assert.True(files.ContainsKey("CreateTaskDto"));
-        Assert.Contains("public record CreateTaskDto", files["CreateTaskDto"]);
+        Assert.Contains("public partial record CreateTaskDto", files["CreateTaskDto"]);
         Assert.Contains("Title", files["CreateTaskDto"]);
         Assert.Contains("Description", files["CreateTaskDto"]);
     }
@@ -497,7 +501,9 @@ public class PipelineIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var pocoFiles = PocoGenerator.Generate(studioSchema);
 
         // Assert — all entities + enum should be generated
-        Assert.Equal(4, pocoFiles.Count);
+        // Presence rather than an exact count: the generator also emits supporting files
+        // (serialization context, index verification), and their number is not the subject
+        // of this test.
         Assert.True(pocoFiles.ContainsKey("Order"));
         Assert.True(pocoFiles.ContainsKey("Customer"));
         Assert.True(pocoFiles.ContainsKey("OrderItem"));
