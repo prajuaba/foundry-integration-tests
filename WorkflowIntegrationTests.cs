@@ -12,7 +12,7 @@ using Xunit;
 using Foundry.Rules;
 using Foundry.Api.Manifest;
 using Foundry.Core.Entities;
-using FoundryMongo.Repositories;
+using Foundry.Mongo.Repositories;
 
 namespace Foundry.IntegrationTests;
 

@@ -9,7 +9,7 @@ using NSubstitute;
 using Xunit;
 using Foundry.Core.Attributes;
 using Foundry.Core.Entities;
-using FoundryMongo.Repositories;
+using Foundry.Mongo.Repositories;
 
 namespace Foundry.IntegrationTests;
 

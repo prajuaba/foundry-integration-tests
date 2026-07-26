@@ -11,7 +11,7 @@ using Foundry.Kafka.Bridge;
 using Foundry.Kafka.Configuration;
 using Foundry.Kafka.Consumer;
 using Foundry.Kafka.Producer;
-using FoundryMongo.Repositories;
+using Foundry.Mongo.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
